@@ -42,6 +42,10 @@
         "phpunit/phpunit": "~4.0"
     },
 
+    "suggest": {
+        "phpmd/phpmd" : "~2.0"
+    },
+
     "bin": [
         "bin/static-review.php"
     ]
