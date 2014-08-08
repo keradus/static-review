@@ -42,6 +42,10 @@
         "phpunit/phpunit": "~4.0"
     },
 
+    "suggest": {
+        "squizlabs/php_codesniffer": "~1.5"
+    },
+
     "bin": [
         "bin/static-review.php"
     ]
