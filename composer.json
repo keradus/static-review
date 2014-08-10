@@ -39,11 +39,12 @@
 
     "require-dev": {
         "mockery/mockery": "~0.9",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.0",
+        "phpmd/phpmd" : "~2.0"
     },
 
     "suggest": {
-        "phpmd/phpmd" : "~2.0"
+        "phpmd/phpmd" : "Enables the PhpMessDetectorReview."
     },
 
     "bin": [
