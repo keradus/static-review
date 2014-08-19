@@ -35,30 +35,52 @@ class GitVersionControl implements VersionControlInterface
      */
     public function getStagedFiles()
     {
+        $base = $this->getBaseProjectPath();
+
         $files = new FileCollection();
 
-        $process = new Process('git rev-parse --show-toplevel');
-        $process->run();
+        foreach($this->getModifiedFiles() as $line) {
 
-        $base = trim($process->getOutput());
+            list($status, $relativePath) = explode("\t", $line);
 
-        $process = new Process('git diff --cached --name-status --diff-filter=ACMR');
-        $process->run();
+            $path = $base . '/' . $relativePath;
 
-        $output = array_filter(explode(PHP_EOL, $process->getOutput()));
+            $file = new File($status, $path, $base);
 
-        foreach($output as $file) {
-            list($status, $relativePath) = explode("\t", $file);
-
-            $fullPath = $base . '/' . $relativePath;
-
-            $file = new File($status, $fullPath, $base);
             $this->saveFileToCache($file);
 
             $files->append($file);
         }
 
         return $files;
+    }
+
+    /**
+     * Gets a list of the staged files from git.
+     *
+     * @return string[]
+     */
+    private function getModifiedFiles()
+    {
+        $process = new Process('git diff --cached --name-status --diff-filter=ACMR');
+        $process->run();
+
+        $raw = explode(PHP_EOL, $process->getOutput());
+
+        return array_filter($raw);
+    }
+
+    /**
+     * Gets the base path for the git project.
+     *
+     * @return string
+     */
+    private function getBaseProjectPath()
+    {
+        $process = new Process('git rev-parse --show-toplevel');
+        $process->run();
+
+        return trim($process->getOutput());
     }
 
     /**
